@@ -4,6 +4,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using UnityEngine;
 public class JBBoxingMain : MonoBehaviour {
     private MqttClient mqttClient;
+    public System.Action<int> delegatePower;
     private void Awake () {
         //链接服务器  
         mqttClient = new MqttClient ("47.102.157.42");
@@ -22,7 +23,7 @@ public class JBBoxingMain : MonoBehaviour {
         mqttClient.Disconnect ();
     }
 
-    static void client_MqttMsgPublishReceived (object sender, MqttMsgPublishEventArgs e) {
+    void client_MqttMsgPublishReceived (object sender, MqttMsgPublishEventArgs e) {
         // handle message received  
         //Debug.Log ("返回数据");
         string msg = System.Text.Encoding.Default.GetString (e.Message);
@@ -32,6 +33,9 @@ public class JBBoxingMain : MonoBehaviour {
         if (datas[0] == "force") {
             float power = float.Parse (datas[1]);
             Debug.LogWarning (" Power : " + power.ToString ());
+            if (delegatePower != null) {
+                delegatePower (Mathf.CeilToInt (power * 10));
+            }
         }
     }
 }
