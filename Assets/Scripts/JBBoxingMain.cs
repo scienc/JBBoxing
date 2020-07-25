@@ -5,9 +5,11 @@ using UnityEngine;
 public class JBBoxingMain : MonoBehaviour {
     private MqttClient mqttClient;
     public System.Action<int> delegatePower;
+    public string addressID = "192.168.0.2";
+    public int addressPort = 1883;
     private void Awake () {
         //链接服务器  
-        mqttClient = new MqttClient ("192.168.0.2",1883,false,null);
+        mqttClient = new MqttClient (addressID, addressPort, false, null);
         //注册服务器返回信息接受函数  
         mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
         //客户端ID  一个字符串  
@@ -39,11 +41,9 @@ public class JBBoxingMain : MonoBehaviour {
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
+    private void Update () {
+        if (Input.GetKeyDown (KeyCode.Escape)) {
+            Application.Quit ();
         }
-    }    
+    }
 }
