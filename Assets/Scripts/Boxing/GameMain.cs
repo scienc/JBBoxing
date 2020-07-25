@@ -73,6 +73,10 @@ public class GameMain : MonoBehaviour {
         if (receivePower.Count > 0) {
             ExecturePower (receivePower.Dequeue ());
         }
+
+        if (Input.GetKeyDown (KeyCode.Escape)) {
+            Application.Quit ();
+        }
     }
 
     public void InitPage () {

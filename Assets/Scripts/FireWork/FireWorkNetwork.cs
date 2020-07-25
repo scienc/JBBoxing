@@ -2,20 +2,23 @@
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using UnityEngine;
-public class JBBoxingMain : MonoBehaviour {
+public class FireWorkNetwork : MonoBehaviour {
     private MqttClient mqttClient;
-    public System.Action<int> delegatePower;
-    public string addressID = "192.168.0.2";
+    public System.Action<Vector3> delegatePos;
+    public string addressID = "192.168.0.1";
     public int addressPort = 1883;
+    public string userName = "";
+    public string password = "";
     private void Awake () {
         //链接服务器  
         mqttClient = new MqttClient (addressID, addressPort, false, null);
         //注册服务器返回信息接受函数  
         mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
         //客户端ID  一个字符串  
-        mqttClient.Connect ("JBBoxing", "loop", "54240717");
+        mqttClient.Connect ("FireWork", userName, password);
         //监听FPS字段的返回数据  
         mqttClient.Subscribe (new string[] { "/boxing" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+        Debug.Log (mqttClient.IsConnected);
     }
 
     /// <summary>
@@ -26,24 +29,21 @@ public class JBBoxingMain : MonoBehaviour {
     }
 
     void client_MqttMsgPublishReceived (object sender, MqttMsgPublishEventArgs e) {
-        // handle message received  
-        //Debug.Log ("返回数据");
         string msg = System.Text.Encoding.Default.GetString (e.Message);
         string[] datas = msg.Split (':');
         if (datas.Length != 2)
             return;
-        if (datas[0] == "force") {
-            float power = float.Parse (datas[1]);
-            Debug.LogWarning (" Power : " + power.ToString ());
-            if (delegatePower != null) {
-                delegatePower (Mathf.CeilToInt (power * 20));
+        if (datas[0] == "pos") {
+            string[] datas2 = datas[1].Split (',');
+            if (datas2.Length == 2) {
+                Vector3 pos = new Vector3 (float.Parse (datas2[0]), float.Parse (datas2[1]));
+                Debug.Log ("Receive Pos" + pos);
+                if (delegatePos != null) {
+                    delegatePos (pos);
+                }
+            } else {
+                Debug.LogWarning ("Pos is error " + msg);
             }
-        }
-    }
-
-    private void Update () {
-        if (Input.GetKeyDown (KeyCode.Escape)) {
-            Application.Quit ();
         }
     }
 }
