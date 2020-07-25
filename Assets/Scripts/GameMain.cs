@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class GameMain : MonoBehaviour {
     public JBBoxingMain boxingNet;
@@ -33,6 +34,9 @@ public class GameMain : MonoBehaviour {
     public GameObject WinPage;
     public GameObject LosePage;
 
+    public RawImage announceImage;
+    public VideoPlayer videoPlayer;
+
     private int currentPowerNum = 0;
     private int currentWaterLine = 0;
     private int currentTime = 0;
@@ -61,6 +65,8 @@ public class GameMain : MonoBehaviour {
         InitPage ();
         mWaterScoreSeq = DOTween.Sequence ();
         mWaterScoreSeq.SetAutoKill (false);
+        videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
+        videoPlayer.SetTargetAudioSource (0, videoPlayer.transform.GetComponent<AudioSource> ());
     }
 
     void Update () {
@@ -70,6 +76,9 @@ public class GameMain : MonoBehaviour {
     }
 
     public void InitPage () {
+        announceImage.enabled = false;
+        videoPlayer.frame = 1;
+        videoPlayer.Pause ();
         currentPowerNum = 0;
         currentTime = 0;
         currentWaterLine = 0;
@@ -104,7 +113,7 @@ public class GameMain : MonoBehaviour {
             currentPowerNum += 1;
             scoreTex.text = currentPowerNum.ToString ();
             int oldVlaue = currentWaterLine;
-            currentWaterLine += (power * 2);
+            currentWaterLine += power;
             RefreshWaterLine (oldVlaue, currentWaterLine);
 
         }
@@ -152,14 +161,15 @@ public class GameMain : MonoBehaviour {
     public void RefreshWaterLine (int oldvalue, int newvalue) {
         if (currentWaterLine >= gameWaterLine) {
             currentWaterLine = gameWaterLine;
-            waterLineTex.text = currentWaterLine.ToString ();
+            mWaterScoreSeq.Kill ();
+            waterLineTex.text = newvalue.ToString ();
             GameEnd (true);
             return;
         }
-        Debug.Log("~~~~~~~~~~~~~~~~~~~~~");
-        Debug.Log("oldvalue " + oldvalue + " newValue " + newvalue);
-        mWaterScoreSeq.Append (DOTween.To (delegate (float value) {            
-            waterLineTex.text = Mathf.CeilToInt(value).ToString();
+        Debug.Log ("~~~~~~~~~~~~~~~~~~~~~");
+        Debug.Log ("oldvalue " + oldvalue + " newValue " + newvalue);
+        mWaterScoreSeq.Append (DOTween.To (delegate (float value) {
+            waterLineTex.text = Mathf.CeilToInt (value).ToString ();
         }, oldvalue, newvalue, 0.4f));
         //waterLineTex.text = currentWaterLine.ToString ();
         waterImage.DOLocalMoveY (waterMinY + currentWaterLine * waterOffsetY, 0.2f);
@@ -171,10 +181,23 @@ public class GameMain : MonoBehaviour {
         boxState = win?BOXINGSTATE.WIN : BOXINGSTATE.LOSE;
         ChangePage (boxState);
         waterLineAnim.Stop ();
-        StartCoroutine (GameEndEffect ());
+        if (win)
+            StartCoroutine (GameEndEffect ());
+        else {
+            StartCoroutine (GameEnd ());
+        }
     }
 
     IEnumerator GameEndEffect () {
+        yield return new WaitForSeconds (3.0f);
+        videoPlayer.frame = 1;
+        videoPlayer.Play ();
+        announceImage.enabled = true;
+        yield return new WaitForSeconds ((float) videoPlayer.clip.length + 1);
+        InitPage ();
+    }
+
+    IEnumerator GameEnd () {
         yield return new WaitForSeconds (3.0f);
         InitPage ();
     }

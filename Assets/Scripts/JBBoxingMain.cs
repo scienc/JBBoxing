@@ -7,7 +7,7 @@ public class JBBoxingMain : MonoBehaviour {
     public System.Action<int> delegatePower;
     private void Awake () {
         //链接服务器  
-        mqttClient = new MqttClient ("47.102.157.42");
+        mqttClient = new MqttClient ("192.168.0.2",1883,false,null);
         //注册服务器返回信息接受函数  
         mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
         //客户端ID  一个字符串  
@@ -34,8 +34,16 @@ public class JBBoxingMain : MonoBehaviour {
             float power = float.Parse (datas[1]);
             Debug.LogWarning (" Power : " + power.ToString ());
             if (delegatePower != null) {
-                delegatePower (Mathf.CeilToInt (power * 10));
+                delegatePower (Mathf.CeilToInt (power * 20));
             }
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }    
 }
