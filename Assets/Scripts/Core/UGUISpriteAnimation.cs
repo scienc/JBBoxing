@@ -44,6 +44,7 @@ public class UGUISpriteAnimation : MonoBehaviour {
     public void Play () {
         IsPlaying = true;
         Foward = true;
+        ImageSource.enabled = true;
     }
 
     public void PlayReverse () {
@@ -69,14 +70,14 @@ public class UGUISpriteAnimation : MonoBehaviour {
                 if (Loop) {
                     mCurFrame = 0;
                 } else {
-                    IsPlaying = false;
+                    Stop ();
                     return;
                 }
             } else if (mCurFrame < 0) {
                 if (Loop) {
                     mCurFrame = FrameCount - 1;
                 } else {
-                    IsPlaying = false;
+                    Stop ();
                     return;
                 }
             }
@@ -98,6 +99,7 @@ public class UGUISpriteAnimation : MonoBehaviour {
         mCurFrame = 0;
         SetSprite (mCurFrame);
         IsPlaying = false;
+        ImageSource.enabled = false;
     }
 
     public void Rewind () {

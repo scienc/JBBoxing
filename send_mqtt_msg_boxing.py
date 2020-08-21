@@ -29,7 +29,7 @@ if __name__ == '__main__':
     client.loop_start()
     num = 0 
     while True:
-        if num < 100:
+        if num < 1:
             time.sleep(random.randrange(0,1))
             frorce = random.random()+1
             bmsg =  str.encode('force:{}'.format(frorce))
@@ -37,6 +37,6 @@ if __name__ == '__main__':
             print('发送消息{}'.format(bmsg))
             num += 1
         else:
-            time.sleep(10)
+            time.sleep(1)
             num = 0
         

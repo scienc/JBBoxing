@@ -119,7 +119,6 @@ public class GameMain : MonoBehaviour {
             int oldVlaue = currentWaterLine;
             currentWaterLine += power;
             RefreshWaterLine (oldVlaue, currentWaterLine);
-
         }
     }
 

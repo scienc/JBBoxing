@@ -7,6 +7,8 @@ public class JBBoxingMain : MonoBehaviour {
     public System.Action<int> delegatePower;
     public string addressID = "192.168.0.2";
     public int addressPort = 1883;
+
+    public float powerOffset = 20;
     private void Awake () {
         //链接服务器  
         mqttClient = new MqttClient (addressID, addressPort, false, null);
@@ -36,7 +38,7 @@ public class JBBoxingMain : MonoBehaviour {
             float power = float.Parse (datas[1]);
             Debug.LogWarning (" Power : " + power.ToString ());
             if (delegatePower != null) {
-                delegatePower (Mathf.CeilToInt (power * 20));
+                delegatePower (Mathf.CeilToInt (power * powerOffset));
             }
         }
     }
