@@ -24,6 +24,8 @@ public class BossControll : MonoBehaviour {
 
     public System.Action delegateBossDeadEvent;
     public System.Action delegateBossDeadFinish;
+
+    private Tween bossTW;
     public void InitBoss () {
         currentBossHp = BossMaxHp;
         bkgHPBar.sizeDelta = new Vector2 (bar, 45);
@@ -59,8 +61,10 @@ public class BossControll : MonoBehaviour {
         }
         AudioManager.PlaySe ("hit-" + bossIndex);
         hitBaseAnim.Play ();
-        bossImage.transform.localScale = Vector3.one;
-        bossImage.transform.DOShakeScale (0.3f);
+        if (bossTW == null || !bossTW.IsPlaying ()) {
+            bossImage.transform.localScale = Vector3.one;
+            bossTW = bossImage.transform.DOShakeScale (0.3f);
+        }
     }
 
     IEnumerator waitForHp (float offset) {

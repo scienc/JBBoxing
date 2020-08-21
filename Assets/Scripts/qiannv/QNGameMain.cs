@@ -21,13 +21,13 @@ public class QNGameMain : MonoBehaviour {
 
     private bool isReceive = false;
 
-    public int currentBoxIndex = 0;
+    public int currentBossIndex = 0;
     private BossControll currentbossControll = null;
 
     void Awake () {
         boxingNet.delegatePower = ReceiveBoxing;
         isReceive = false;
-        currentbossControll = bossControll[currentBoxIndex];
+        currentbossControll = bossControll[currentBossIndex];
         currentbossControll.delegateBossDeadEvent = () => {
             gameState = GAMESTATE.DEAD;
             isReceive = false;
@@ -65,6 +65,21 @@ public class QNGameMain : MonoBehaviour {
         if (Input.GetKeyDown (KeyCode.Escape)) {
             Application.Quit ();
         }
+        // if (Input.GetKeyDown (KeyCode.Q)) {
+        //     ChangeBoss (0);
+        // } else if (Input.GetKeyDown (KeyCode.W)) {
+        //     ChangeBoss (1);
+        // }
+        if (Input.GetKeyDown (KeyCode.Space)) {
+            float rd = Random.Range (1000, 2000) * 0.001f;
+            int power = Mathf.CeilToInt (rd * 30);
+            ExecturePower (power);
+        }
+    }
+
+    public void ChangeBoss (int index) {
+        currentBossIndex = 0;
+        currentbossControll = bossControll[currentBossIndex];
     }
 
     public void GameIdel () {
@@ -78,6 +93,7 @@ public class QNGameMain : MonoBehaviour {
             gamePage.gameObject.SetActive (false);
         };
         loadingPage.delegateLeaveFinsih = () => {
+            receivePower.Clear();
             isReceive = true;
             loadingPage.gameObject.SetActive (false);
         };
