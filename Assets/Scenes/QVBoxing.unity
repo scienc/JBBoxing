@@ -2902,10 +2902,11 @@ MonoBehaviour:
   boxingNet: {fileID: 924055351}
   loadingPage: {fileID: 1424762645}
   beginPage: {fileID: 1093831383}
+  beginImage: {fileID: 453671230}
   gamePage: {fileID: 661436372}
   bossControll:
   - {fileID: 445458809}
-  currentBoxIndex: 0
+  currentBossIndex: 0
 --- !u!114 &924055351
 MonoBehaviour:
   m_ObjectHideFlags: 0

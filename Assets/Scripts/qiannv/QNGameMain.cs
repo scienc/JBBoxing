@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class QNGameMain : MonoBehaviour {
     public JBBoxingMain boxingNet;
@@ -13,6 +15,7 @@ public class QNGameMain : MonoBehaviour {
 
     public LoadingPage loadingPage;
     public GameObject beginPage;
+    public Image beginImage;
     public GameObject gamePage;
 
     public List<BossControll> bossControll = new List<BossControll> ();
@@ -101,6 +104,7 @@ public class QNGameMain : MonoBehaviour {
 
     public void ReadyGame () {
         gameState = GAMESTATE.LOADING;
+        beginImage.transform.DOShakeScale(0.3f,0.5f);
         isReceive = false;
         float timeLength = 0.0f;
         int random = Random.Range (1, 100);
