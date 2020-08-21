@@ -93,13 +93,14 @@ public class QNGameMain : MonoBehaviour {
             gamePage.gameObject.SetActive (false);
         };
         loadingPage.delegateLeaveFinsih = () => {
-            receivePower.Clear();
+            receivePower.Clear ();
             isReceive = true;
             loadingPage.gameObject.SetActive (false);
         };
     }
 
     public void ReadyGame () {
+        gameState = GAMESTATE.LOADING;
         isReceive = false;
         float timeLength = 0.0f;
         int random = Random.Range (1, 100);
