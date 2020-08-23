@@ -4,7 +4,8 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BossControll : MonoBehaviour {
+public class BossControll : MonoBehaviour
+{
     public RectTransform bkgHPBar;
     public RectTransform fontHpBar;
 
@@ -24,72 +25,92 @@ public class BossControll : MonoBehaviour {
 
     public System.Action delegateBossDeadEvent;
     public System.Action delegateBossDeadFinish;
+    public System.Action delegateKO;
 
     private Tween bossTW;
-    public void InitBoss () {
+    public void InitBoss()
+    {
         currentBossHp = BossMaxHp;
-        bkgHPBar.sizeDelta = new Vector2 (bar, 45);
-        fontHpBar.sizeDelta = new Vector2 (bar, 45);
-        hitAnim.Stop ();
-        hit2Anim.Stop ();
-        hitBaseAnim.Stop ();
+        bkgHPBar.sizeDelta = new Vector2(bar, 45);
+        fontHpBar.sizeDelta = new Vector2(bar, 45);
+        hitAnim.Stop();
+        hit2Anim.Stop();
+        hitBaseAnim.Stop();
         bossImage.enabled = true;
         bossDeadImage.enabled = false;
     }
 
-    public void Attack (float value) {
-        currentBossHp -= value;
-        if (currentBossHp <= 0) {
-            currentBossHp = 0;
-            delegateBossDeadEvent ();
+    public void Attack(float value)
+    {
+        if(currentBossHp <= 0){
+            return;
         }
-        Debug.Log ("current hp " + currentBossHp);
+        currentBossHp -= value;
+        if (currentBossHp <= 0)
+        {
+            currentBossHp = 0;
+            delegateBossDeadEvent();
+        }
         float offset = (bar * currentBossHp) / BossMaxHp;
-        StartCoroutine (waitForHp (offset));
-        int random1 = Random.Range (1, 100);
-        if (random1 < 50) {
-            AudioManager.PlaySe ("normalHit");
-        } else {
-            AudioManager.PlaySe ("normalHit2");
+        StartCoroutine(waitForHp(offset));
+        int random1 = Random.Range(1, 100);
+        if (random1 < 50)
+        {
+            AudioManager.PlaySe("normalHit");
+        }
+        else
+        {
+            AudioManager.PlaySe("normalHit2");
         }
 
-        int random = Random.Range (1, 100);
-        if (random < 50) {
-            hitAnim.Play ();
-        } else {
-            hit2Anim.Play ();
+        int random = Random.Range(1, 100);
+        if (random < 50)
+        {
+            hitAnim.Play();
         }
-        AudioManager.PlaySe ("hit-" + bossIndex);
-        hitBaseAnim.Play ();
-        if (bossTW == null || !bossTW.IsPlaying ()) {
+        else
+        {
+            hit2Anim.Play();
+        }
+        AudioManager.PlaySe("hit-" + bossIndex);
+        hitBaseAnim.Play();
+        if (bossTW == null || !bossTW.IsPlaying())
+        {
             bossImage.transform.localScale = Vector3.one;
-            bossTW = bossImage.transform.DOShakeScale (0.3f);
+            bossTW = bossImage.transform.DOShakeScale(0.3f);
         }
     }
 
-    IEnumerator waitForHp (float offset) {
+    IEnumerator waitForHp(float offset)
+    {
         float oldvalue = fontHpBar.sizeDelta.x;
         float newvalue = offset;
-        DOTween.To (delegate (float value) { fontHpBar.sizeDelta = new Vector2 (value, 45); }, oldvalue, newvalue, 0.4f);
-        yield return new WaitForSeconds (0.2f);
-        DOTween.To (delegate (float value) { bkgHPBar.sizeDelta = new Vector2 (value, 45); }, oldvalue, newvalue, 0.4f);
-        yield return new WaitForSeconds (0.5f);
-        bkgHPBar.sizeDelta = new Vector2 (offset, 45);
-        fontHpBar.sizeDelta = new Vector2 (offset, 45);
-        if (currentBossHp == 0) {
-            StartCoroutine (BossDead ());
+        DOTween.To(delegate (float value) { fontHpBar.sizeDelta = new Vector2(value, 45); }, oldvalue, newvalue, 0.4f);
+        yield return new WaitForSeconds(0.2f);
+        DOTween.To(delegate (float value) { bkgHPBar.sizeDelta = new Vector2(value, 45); }, oldvalue, newvalue, 0.4f);
+        yield return new WaitForSeconds(0.5f);
+        //bkgHPBar.sizeDelta = new Vector2(offset, 45);
+        //fontHpBar.sizeDelta = new Vector2(offset, 45);
+        if (currentBossHp == 0)
+        {
+            StartCoroutine(BossDead());
         }
     }
 
-    IEnumerator BossDead () {
+    IEnumerator BossDead()
+    {
         bossImage.enabled = false;
         bossDeadImage.enabled = true;
-        bossDeadImage.DOFade (1, 0);
-        float waitTime = AudioManager.PlaySe ("success-" + bossIndex);
-        bossDeadImage.DOFade (0, 1.0f);
-        yield return new WaitForSeconds (Mathf.Max (waitTime, 1.0f));
-        if (delegateBossDeadFinish != null) {
-            delegateBossDeadFinish ();
+        bossDeadImage.DOFade(1, 0);
+        float waitTime = AudioManager.PlaySe("ko");
+        delegateKO();
+        yield return new WaitForSeconds(waitTime);
+        waitTime = AudioManager.PlaySe("success-" + bossIndex);
+        bossDeadImage.DOFade(0, waitTime);
+        yield return new WaitForSeconds(waitTime);
+        if (delegateBossDeadFinish != null)
+        {
+            delegateBossDeadFinish();
         }
     }
 }
