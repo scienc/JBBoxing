@@ -22,7 +22,7 @@ public class QNGameMain : MonoBehaviour
 
     public List<BossControll> bossControll = new List<BossControll>();
     private GAMESTATE gameState = GAMESTATE.BEGIN;
-    private Queue<int> receivePower = new Queue<int>();
+    private Queue<PowerData> receivePower = new Queue<PowerData>();
 
     private bool isReceive = false;
 
@@ -51,13 +51,13 @@ public class QNGameMain : MonoBehaviour
         GameIdel();
     }
 
-    public void ReceiveBoxing(int power)
+    public void ReceiveBoxing(PowerData data)
     {
         if (isReceive)
-            receivePower.Enqueue(power);
+            receivePower.Enqueue(data);
     }
 
-    private void ExecturePower(int power)
+    private void ExecturePower(PowerData power)
     {
         if (gameState == GAMESTATE.BEGIN)
         {
@@ -65,7 +65,8 @@ public class QNGameMain : MonoBehaviour
         }
         else if (gameState == GAMESTATE.GAME)
         {
-            currentbossControll.Attack(power/difficult);
+            power.value = power.value / difficult;
+            currentbossControll.Attack(power);
         }
     }
 
@@ -83,8 +84,12 @@ public class QNGameMain : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             float rd = Random.Range(1000, 2000) * 0.001f;
-            int power = Mathf.CeilToInt(rd * 30);
-            ExecturePower(power);
+            float power = rd * 30;
+            int range = Random.Range(0, 2);
+            PowerData data = new PowerData();
+            data.value = power;
+            data.direction = range;
+            ExecturePower(data);
         }
         if (gameState == GAMESTATE.BEGIN)
         {

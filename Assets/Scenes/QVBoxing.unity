@@ -2860,6 +2860,8 @@ MonoBehaviour:
   - {fileID: 468426486}
   currentBossIndex: 0
   koAnim: {fileID: 1221986499}
+  bkgAnim: {fileID: 1010382666}
+  difficult: 1
 --- !u!114 &924055351
 MonoBehaviour:
   m_ObjectHideFlags: 0

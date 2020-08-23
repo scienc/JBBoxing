@@ -61,7 +61,7 @@ public class GameMain : MonoBehaviour {
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake () {
-        boxingNet.delegatePower = ReceiveBoxing;
+        //boxingNet.delegatePower = ReceiveBoxing;
         InitPage ();
         mWaterScoreSeq = DOTween.Sequence ();
         mWaterScoreSeq.SetAutoKill (false);

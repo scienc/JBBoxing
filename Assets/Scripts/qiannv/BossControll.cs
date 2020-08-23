@@ -40,12 +40,13 @@ public class BossControll : MonoBehaviour
         bossDeadImage.enabled = false;
     }
 
-    public void Attack(float value)
+    public void Attack(PowerData data)
     {
-        if(currentBossHp <= 0){
+        if (currentBossHp <= 0)
+        {
             return;
         }
-        currentBossHp -= value;
+        currentBossHp -= data.value;
         if (currentBossHp <= 0)
         {
             currentBossHp = 0;
@@ -53,8 +54,7 @@ public class BossControll : MonoBehaviour
         }
         float offset = (bar * currentBossHp) / BossMaxHp;
         StartCoroutine(waitForHp(offset));
-        int random1 = Random.Range(1, 100);
-        if (random1 < 50)
+        if (data.direction == 0)
         {
             AudioManager.PlaySe("normalHit");
         }
@@ -63,8 +63,7 @@ public class BossControll : MonoBehaviour
             AudioManager.PlaySe("normalHit2");
         }
 
-        int random = Random.Range(1, 100);
-        if (random < 50)
+        if (data.direction == 0)
         {
             hitAnim.Play();
         }
