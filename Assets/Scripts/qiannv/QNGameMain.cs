@@ -39,7 +39,7 @@ public class QNGameMain : MonoBehaviour
         boxingNet.delegatePower = ReceiveBoxing;
         isReceive = false;
         ChangeBoss(currentBossIndex);
-        koAnim.Stop();
+        //koAnim.Stop();
     }
 
     /// <summary>
