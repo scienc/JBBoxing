@@ -25,17 +25,17 @@ public class JBBoxingMain : MonoBehaviour
         //注册服务器返回信息接受函数  
         mqttClientLeft.MqttMsgPublishReceived += client_MqttMsgPublishReceivedLeft;
         //客户端ID  一个字符串  
-        mqttClientLeft.Connect("TRIGGER1A", "loop", "54240717");
+        mqttClientLeft.Connect("/boxing", "loop", "54240717");
         //监听FPS字段的返回数据  
         mqttClientLeft.Subscribe(new string[] { "/boxing" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
 
-        mqttClientRight = new MqttClient(addressID, addressPort, false, null);
-        //注册服务器返回信息接受函数  
-        mqttClientRight.MqttMsgPublishReceived += client_MqttMsgPublishReceivedRight;
-        //客户端ID  一个字符串  
-        mqttClientRight.Connect("TRIGGER1B", "loop", "54240717");
-        //监听FPS字段的返回数据  
-        mqttClientRight.Subscribe(new string[] { "/boxing" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+        // mqttClientRight = new MqttClient(addressID, addressPort, false, null);
+        // //注册服务器返回信息接受函数  
+        // mqttClientRight.MqttMsgPublishReceived += client_MqttMsgPublishReceivedRight;
+        // //客户端ID  一个字符串  
+        // mqttClientRight.Connect("TRIGGER1B", "loop", "54240717");
+        // //监听FPS字段的返回数据  
+        // mqttClientRight.Subscribe(new string[] { "/boxing" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
     }
 
     /// <summary>

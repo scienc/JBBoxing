@@ -54,7 +54,8 @@ public class BossControll : MonoBehaviour
         }
         float offset = (bar * currentBossHp) / BossMaxHp;
         StartCoroutine(waitForHp(offset));
-        if (data.direction == 0)
+        int rang = UnityEngine.Random.Range(0, 100);
+        if (rang <= 50)
         {
             AudioManager.PlaySe("normalHit");
         }
@@ -62,8 +63,8 @@ public class BossControll : MonoBehaviour
         {
             AudioManager.PlaySe("normalHit2");
         }
-
-        if (data.direction == 0)
+        int rang2 = UnityEngine.Random.Range(0, 100);
+        if (rang2 <= 50)
         {
             hitAnim.Play();
         }
