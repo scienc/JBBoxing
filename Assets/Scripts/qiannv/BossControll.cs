@@ -28,8 +28,9 @@ public class BossControll : MonoBehaviour
     public System.Action delegateKO;
 
     private Tween bossTW;
-    public void InitBoss()
+    public void InitBoss(int maxHp)
     {
+        BossMaxHp = maxHp;
         currentBossHp = BossMaxHp;
         bkgHPBar.sizeDelta = new Vector2(bar, 45);
         fontHpBar.sizeDelta = new Vector2(bar, 45);
@@ -72,8 +73,12 @@ public class BossControll : MonoBehaviour
         {
             hit2Anim.Play();
         }
-        AudioManager.PlaySe("hit-" + bossIndex);
+        //AudioManager.PlaySe("hit-" + bossIndex); //Marc说禁用
+
         hitBaseAnim.Play();
+
+        Camera.main.gameObject.GetComponent<ShakeCamera>().enabled = true;//李泽广添加
+
         if (bossTW == null || !bossTW.IsPlaying())
         {
             bossImage.transform.localScale = Vector3.one;
@@ -81,6 +86,7 @@ public class BossControll : MonoBehaviour
         }
     }
 
+   bool isdead=false;//李泽广
     IEnumerator waitForHp(float offset)
     {
         float oldvalue = fontHpBar.sizeDelta.x;
@@ -91,8 +97,9 @@ public class BossControll : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         //bkgHPBar.sizeDelta = new Vector2(offset, 45);
         //fontHpBar.sizeDelta = new Vector2(offset, 45);
-        if (currentBossHp == 0)
+        if (currentBossHp == 0&&!isdead)
         {
+            isdead=true;
             StartCoroutine(BossDead());
         }
     }
@@ -112,5 +119,6 @@ public class BossControll : MonoBehaviour
         {
             delegateBossDeadFinish();
         }
+        isdead=false;
     }
 }

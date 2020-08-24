@@ -12,6 +12,46 @@ public class LoadingPage : MonoBehaviour {
     public System.Action delegateEnterFinsih;
     public System.Action delegateLeaveFinsih;
 
+    public GameObject cloudOpen;//
+    public GameObject cloudClose;//
+    public System.Action delegateOpenFinsih;//
+    public System.Action delegateCloseFinsih;//
+
+    public IEnumerator CloudOpen(float duration)//
+    {
+        yield return new WaitForSeconds(duration);//
+        //duration = duration / 2;//
+        cloudOpen.SetActive(true);
+        yield return new WaitForSeconds(2);//
+        cloudOpen.SetActive(false);
+        delegateOpenFinsih();//
+        //StopAllCoroutines();
+    }
+    public IEnumerator CloudClose(float duration)//
+    {
+        yield return new WaitForSeconds(duration);//
+        //duration = duration / 2;//
+        cloudClose.SetActive(true);
+        yield return new WaitForSeconds(2);//
+        cloudClose.SetActive(false);
+        delegateCloseFinsih();//
+        //StopAllCoroutines();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+           
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+           
+        }
+    }
+
+
+
     public void ChangePage (float duration) {
         StartCoroutine (ChangePageWait (duration));
     }
