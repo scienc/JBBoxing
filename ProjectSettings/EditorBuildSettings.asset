@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Boxing.unity
-    guid: c965c185de1880f4a8385c6e9379f13d
-  - enabled: 1
-    path: Assets/Scenes/FireWork.unity
-    guid: 4fc3e79da38142f4bb236d9076416bea
+    path: Assets/Scenes/QVBoxing.unity
+    guid: 9f0f5f2d4e7196d478e0ee26c0966424
   m_configObjects: {}
