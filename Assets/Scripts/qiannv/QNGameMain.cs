@@ -34,6 +34,10 @@ public class QNGameMain : MonoBehaviour {
     public int bossMaxHpBase = 100;
     public int currentbossMaxHpOffset = 0;
 
+    private bool isShowDropDown = false;
+    public GameObject editorObj;
+    public InputField inputField;
+
     void Awake () {
         boxingNet.delegatePower = ReceiveBoxing;
         isReceive = false;
@@ -45,8 +49,10 @@ public class QNGameMain : MonoBehaviour {
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    void Start () {
-        GameIdel ();
+    void Start()
+    {
+        GameIdel();        
+        editorObj.SetActive(isShowDropDown);
     }
 
     public void ReceiveBoxing (PowerData data) {
@@ -114,6 +120,16 @@ public class QNGameMain : MonoBehaviour {
         } else if (Input.GetKeyDown (KeyCode.Alpha0)) {
             currentbossMaxHpOffset = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            isShowDropDown = !isShowDropDown;
+            editorObj.SetActive(isShowDropDown);
+        }
+    }
+    public void ChangeHPBase()
+    {
+        bossMaxHpBase = int.Parse(inputField.text);
     }
 
     public void ChangeBoss (int index) {
